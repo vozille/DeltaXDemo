@@ -16,7 +16,8 @@ namespace DeltaX.Mongo
 
         internal static void Initialise()
         {
-            _server = new MongoClient("mongodb://db:27017");
+            //_server = new MongoClient("mongodb://db:27017");
+            _server = new MongoClient("mongodb://localhost:27017");
             _database = _server.GetDatabase("HollyWood");
         }
 

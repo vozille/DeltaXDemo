@@ -1,0 +1,179 @@
+﻿@{
+    ViewData["Title"] = "Add Movies";
+}
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+<script src="@Url.Content("~/js/vue-select.js")"></script>
+
+
+<body>
+    <div id="add-movies">
+        <div>
+            <div class="form-horizontal">
+
+                <h4 style="text-align:center">Add a new movie</h4>
+
+                <div class="form-group">
+                    <label class="control-label col-md-4"> Name </label>
+                    <div class="col-md-8">
+                        <input style="width:100%" type="text" v-model="new_movie.Name" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-4"> Plot </label>
+                    <div class="col-md-8">
+                        <input style="width:100%" type="text" v-model="new_movie.Plot" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-4"> YearOfRelease </label>
+                    <div class="col-md-8">
+                        <input style="width:100%" type="number" v-model="new_movie.YearOfRelease" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-4">Select Producer </label>
+                    <div class="col-md-8">
+                        <select class="form-control" v-on:input="SelectProducerForMovie($event.target.value);">
+                            <option v-for="producer in producers" v-bind:value="producer._id">{{producer.name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-4">Actors </label>
+                    <div class="col-md-8">
+                        <v-select multiple label="name" placeholder="Add actors in the movie" :on-change="AddNewActorsToMovie" v-bind:options="actors"></v-select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-4">Poster </label>
+                    <div class="col-md-6">
+                        <div style="overflow: hidden">
+                            <input type="file" id="poster-image" v-on:change="UploadMoviePoster">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" v-if="poster_preview_url">
+                    <label class="control-label col-md-4">Poster Image </label>
+                    <div class="col-md-6">
+                        <div style="overflow: hidden">
+                            <img v-if="poster_preview_url" v-bind:src="poster_preview_url">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin-left: 50%;">
+                <button v-if="!is_creating_movie" class="btn btn-primary" v-on:click="AddNewMovie()"> Create Movie</button>
+                <button v-else class="btn btn-primary"> ... Adding </button>
+            </div>
+
+        </div>
+
+        <div>
+            <div class="col-md-6">
+                <div class="form-horizontal">
+                    <h4 style="text-align:center">Add a new producer</h4>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4"> Name </label>
+                        <div class="col-md-8">
+                            <input style="width:100%" type="text" v-model="new_producer.Name" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4"> Gender </label>
+                        <div class="col-md-8">
+                            <select class="form-control" v-on:input="SetGenderOfPerson($event.target.value, new_producer);">
+                                <option v-for="gender_type in gender" v-bind:value="gender_type.value">{{gender_type.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4"> Bio </label>
+                        <div class="col-md-8">
+                            <input style="width:100%" type="text" v-model="new_producer.Bio" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4"> Date Of Birth </label>
+                        <div class="col-md-8">
+                            <input type="date" id="producer-date-of-birth" v-model="new_producer.DateOfBirth"/>
+                        </div>
+                    </div>
+
+                    <div style="text-align:center">
+                        <button class="btn btn-primary" v-if="!is_creating_producer" v-on:click="AddNewProducer()"> Add Producer </button>
+                        <button class="btn btn-primary" v-else > ...Adding </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-horizontal">
+                    <h4 style="text-align:center">Add a new Actor</h4>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4"> Name </label>
+                        <div class="col-md-8">
+                            <input style="width:100%" type="text" v-model="new_actor.Name" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4"> Gender </label>
+                        <div class="col-md-8">
+                            <select class="form-control" v-on:input="SetGenderOfPerson($event.target.value, new_actor);">
+                                <option v-for="gender_type in gender" v-bind:value="gender_type.value">{{gender_type.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4"> Bio </label>
+                        <div class="col-md-8">
+                            <input style="width:100%" type="text" v-model="new_actor.Bio" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4"> Date Of Birth </label>
+                        <div class="col-md-8">
+                            <input type="date" id="producer-date-of-birth" v-model="new_actor.DateOfBirth"/>
+                        </div>
+                    </div>
+
+                    <div style="text-align:center">
+                        <button v-if="!is_creating_actor" class="btn btn-primary" v-on:click="AddNewActor()"> Add Actor </button>
+                        <button v-else class="btn btn-primary"> ...Adding </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="@Url.Content("~/js/add-movies.js")"></script>
+</body>
+

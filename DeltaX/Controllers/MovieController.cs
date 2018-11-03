@@ -33,6 +33,9 @@ namespace DeltaX.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
                 return Ok(MongoConnnector.AddMovieV1(requestModel));
             }
             catch(Exception ex)
