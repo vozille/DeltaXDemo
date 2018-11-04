@@ -1,0 +1,21 @@
+{ 
+    "_id" : ObjectId("5bd9fb7b4a26e27f7092ca94"), 
+    "Name" : "foo", 
+    "Bio" : "test bio", 
+    "Sex" : NumberInt(0), 
+    "DateOfBirth" : ISODate("2000-01-01T00:00:00.000+0000")
+}
+{ 
+    "_id" : ObjectId("5bdaa0cadaec410001e33047"), 
+    "Name" : "bar", 
+    "Bio" : "test bar", 
+    "DateOfBirth" : ISODate("1990-01-01T00:00:00.000+0000"), 
+    "Sex" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5bdd87bfd87b9d2478420067"), 
+    "Name" : "test actor 3", 
+    "Bio" : "test actor 3", 
+    "DateOfBirth" : ISODate("2018-10-03T18:30:00.000+0000"), 
+    "Sex" : NumberInt(0)
+}

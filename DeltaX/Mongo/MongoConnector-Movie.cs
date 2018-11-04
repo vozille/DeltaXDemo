@@ -40,5 +40,22 @@ namespace DeltaX.Mongo
             _movie.InsertOne(newMovieDetails);
             return true;
         }
+
+        internal static bool EditMovieV1(MovieEditRequestModel requestModel)
+        {
+            var _movie = _database.GetCollection<MovieModel>("Movies");
+            var filter = Builders<MovieModel>.Filter.Eq(x=>x._id, new ObjectId(requestModel._id));
+            var update = Builders<MovieModel>.Update
+                .Set(x => x.YearOfRelease, requestModel.YearOfRelease)
+                .Set(x => x.ActorIds, requestModel.ActorIds)
+                .Set(x => x.Name, requestModel.Name)
+                .Set(x => x.Plot, requestModel.Plot)
+                .Set(x => x.PosterImage, requestModel.PosterImage)
+                .Set(x => x.ProducerId, requestModel.ProducerId);
+            var updateResult = _movie.UpdateOne(filter, update);
+            if (updateResult.ModifiedCount > 0)
+                return true;
+            return false;
+        }
     }
 }

@@ -1,0 +1,14 @@
+{ 
+    "_id" : ObjectId("5bdaa349daec410001e33048"), 
+    "Name" : "producer female", 
+    "Bio" : "test producer female", 
+    "DateOfBirth" : ISODate("1980-01-01T00:00:00.000+0000"), 
+    "Sex" : NumberInt(1)
+}
+{ 
+    "_id" : ObjectId("5bdd847ed87b9d2478420065"), 
+    "Name" : "test producer 2", 
+    "Bio" : "producer test 222", 
+    "DateOfBirth" : ISODate("2018-01-03T18:30:00.000+0000"), 
+    "Sex" : NumberInt(0)
+}

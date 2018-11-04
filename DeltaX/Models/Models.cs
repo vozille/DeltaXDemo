@@ -57,4 +57,10 @@ namespace DeltaX.Models
 
     }
 
+    public class MovieEditRequestModel: MovieRequestModel
+    {
+        [Required]
+        public string _id { get; set; }
+    }
+
 }

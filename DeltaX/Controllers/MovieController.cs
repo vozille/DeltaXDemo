@@ -44,5 +44,22 @@ namespace DeltaX.Controllers
             }
         }
 
+        [HttpPatch("v1/EditMovieDetails")]
+
+        public IActionResult EditMovieDetailsV1([FromBody] MovieEditRequestModel requestModel)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                return Ok(MongoConnnector.EditMovieV1(requestModel));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

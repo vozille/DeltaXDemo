@@ -1,5 +1,11 @@
-FROM microsoft/dotnet:2.1.3-aspnetcore-runtime
+FROM microsoft/dotnet:2.1-sdk
 WORKDIR /app
-EXPOSE 80
-COPY "bin/Release/DeltaX" .
-ENTRYPOINT ["dotnet", "DeltaX.dll"]
+
+# copy csproj and restore as distinct layers
+COPY *.csproj ./
+RUN dotnet restore
+
+# copy and build everything else
+COPY . ./
+RUN dotnet publish -c Release -o out
+ENTRYPOINT ["dotnet", "out/DeltaX.dll"]

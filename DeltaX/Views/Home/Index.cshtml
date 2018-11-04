@@ -14,7 +14,53 @@
 
 <body>
     <div id="movies-list">
-        <div style="display:flex;flex-wrap:wrap;">
+
+        <!-- Modal -->
+        <div class="modal fade" id="movie-edit-modal" tabindex="-1" role="dialog" aria-labelledby="movie-edit-modal-label" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" v-if="selected_movie_to_edit">
+                        <div class="form-horizontal">
+
+                            <h4 style="text-align:center">Edit movie</h4>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-4"> Name </label>
+                                <div class="col-md-8">
+                                    <input style="width:100%" type="text" v-model="selected_movie_to_edit.Name" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-4"> Plot </label>
+                                <div class="col-md-8">
+                                    <input style="width:100%" type="text" v-model="selected_movie_to_edit.Plot" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-4"> YearOfRelease </label>
+                                <div class="col-md-8">
+                                    <input style="width:100%" type="number" v-model="selected_movie_to_edit.YearOfRelease" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" v-if="!is_editing_movie" class="btn btn-primary" v-on:click="EditMovie()">Save changes</button>
+                        <button type="button" v-else class="btn btn-primary">Saving</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;" v-if="movies.length > 0">
             <div v-for="movie in movies" style="margin:2%">
                 <div class="card" style="width: 24rem">
                     <img class="card-img-top" v-bind:src="'data:image/jpeg;base64,'+movie.posterImage" alt="Card image cap">
@@ -28,14 +74,20 @@
                             <p>{{actor_id_details[actor_id].name}}</p>
                         </div>
 
-                        <a href="#" class="btn btn-primary">Edit</a>
+
                     </div>
+                    <button class="btn btn-primary" v-on:click="SelectMovieToEdit(movie)"  data-toggle="modal" data-target="#movie-edit-modal" >Edit</button>
+
                 </div>
             </div>
         </div>
 
+        <div v-else>
+            No movies added yet, please add a movie
+        </div>
+
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="@Url.Content("~/js/index.js")"></script>
+    <script src="@Url.Content("~/js/movies-list.js")"></script>
 </body>
 
